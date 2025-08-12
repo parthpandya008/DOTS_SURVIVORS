@@ -13,6 +13,7 @@ public class CharacterAuthoring : MonoBehaviour
             //Take the entity ref that is being baked,
            var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent<CharacterMoveDirection>(entity);
+            AddComponent<InitCharacterFlag>(entity);
             AddComponent(entity, new CharacterMoveSpeed
             {
                 Value = authoring.MoveSpeed,
@@ -30,3 +31,5 @@ public struct CharacterMoveSpeed:IComponentData
 {
     public float Value;
 }
+
+public struct InitCharacterFlag : IComponentData, IEnableableComponent { }
