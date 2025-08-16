@@ -9,8 +9,18 @@ public class PlayerAuthoring : MonoBehaviour
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent<PlayerTag>(entity);
+            AddComponent<InitCameraTargetTag>(entity);
+            AddComponent<CameraTarget>(entity);
         }
     }
 }
 
 public struct PlayerTag: IComponentData { }
+
+public struct CameraTarget: IComponentData 
+{
+    public UnityObjectRef<Transform> CameraTransform;
+}
+
+//This component is to set CameraTarget.CameraTransform once, then remove it
+public struct InitCameraTargetTag: IComponentData { }
