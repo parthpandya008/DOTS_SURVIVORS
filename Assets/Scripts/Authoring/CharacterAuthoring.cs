@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Rendering;
 using UnityEngine;
 
 public class CharacterAuthoring : MonoBehaviour
@@ -18,6 +19,10 @@ public class CharacterAuthoring : MonoBehaviour
             {
                 Value = authoring.MoveSpeed,
             });
+            AddComponent(entity, new FacingDirectionOverride
+            {
+                Value = 1
+            });
         }
     }
 }
@@ -33,3 +38,9 @@ public struct CharacterMoveSpeed:IComponentData
 }
 
 public struct InitCharacterFlag : IComponentData, IEnableableComponent { }
+
+[MaterialProperty("_FacingDirection")]
+public struct FacingDirectionOverride: IComponentData
+{
+    public float Value;
+}
