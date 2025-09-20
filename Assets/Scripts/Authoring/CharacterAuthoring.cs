@@ -7,6 +7,7 @@ using UnityEngine;
 public class CharacterAuthoring : MonoBehaviour
 {
     public float MoveSpeed = 3f;
+    public float MaxHitPoints;
     private class Baker : Baker<CharacterAuthoring>
     {
         public override void Bake(CharacterAuthoring authoring)
@@ -23,6 +24,15 @@ public class CharacterAuthoring : MonoBehaviour
             {
                 Value = 1
             });
+            AddComponent(entity, new CharacterMaxHitPoints 
+            {
+                Value = authoring.MaxHitPoints,
+            });
+            AddComponent(entity, new CharacterCurrentHitPoints
+            {
+                Value = authoring.MaxHitPoints,
+            });
+            AddBuffer<DamageThisFrame>(entity);
         }
     }
 }
@@ -43,4 +53,19 @@ public struct InitCharacterFlag : IComponentData, IEnableableComponent { }
 public struct FacingDirectionOverride: IComponentData
 {
     public float Value;
+}
+
+public struct CharacterMaxHitPoints: IComponentData
+{
+    public float Value;
+}
+
+public struct CharacterCurrentHitPoints: IComponentData
+{
+    public float Value;
+}
+
+public struct DamageThisFrame: IBufferElementData
+{ 
+    public float Value; 
 }

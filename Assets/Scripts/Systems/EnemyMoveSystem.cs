@@ -16,7 +16,7 @@ partial struct EnemyMoveSystem : ISystem
             PlayerPosition = playerPosition
         };
 
-        state.Dependency = enemyMoveJob.Schedule(state.Dependency);
+        state.Dependency = enemyMoveJob.ScheduleParallel(state.Dependency);
     }
 }
 
