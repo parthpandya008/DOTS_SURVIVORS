@@ -70,10 +70,10 @@ partial struct EnemyAttackSystem : ISystem
         // (in production you usually don’t Complete here, to keep jobs async)
         state.Dependency.Complete();
 
-        foreach (var entity in logEntities)
+        /*foreach (var entity in logEntities)
         {
             UnityEngine.Debug.Log($"Collision detected with EntityA: {entity}");
-        }
+        }*/
     }
 }
 
@@ -81,12 +81,13 @@ partial struct EnemyAttackSystem : ISystem
 public struct EnemyAttackJob : ICollisionEventsJob
 {
     // Lookups allow random access to components during job execution
-    [Unity.Collections.ReadOnly]
+    [ReadOnly]
     public ComponentLookup<PlayerTag> PlayerLookup;
-    [Unity.Collections.ReadOnly]
+    [ReadOnly]
     public ComponentLookup<EnemyAttackData> AttackDataLookup;
 
     public ComponentLookup<EnemyCoolDownExpirationTimeStamp> CooldownExpirationLookup;
+    //Dynamic buffer of type 'DamageThisFrame'
     public BufferLookup<DamageThisFrame> DammageBufferLookup;
 
     public double ElapsedTime;
@@ -135,13 +136,11 @@ public struct EnemyAttackJob : ICollisionEventsJob
             Value = attackData.CoolDownTime + ElapsedTime
         };
 
-        // Apply damage to the player via dynamic buffer
+        //Get  the DynamicBuffer, that belongs to this particular playerEntity
         var playerDamageBuffer = DammageBufferLookup[playerEntity];
         playerDamageBuffer.Add(new DamageThisFrame
         {
             Value = attackData.HitPoints
         });
-
-        
     }
 }

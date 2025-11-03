@@ -8,8 +8,9 @@ partial struct ProcessDamageThisFrameSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        foreach(var (characterCurrentHitPoints,damageThisFrame) in 
-            SystemAPI.Query<RefRW<CharacterCurrentHitPoints>, DynamicBuffer<DamageThisFrame>>())
+        foreach(var (characterCurrentHitPoints,damageThisFrame, entity) in 
+            SystemAPI.Query<RefRW<CharacterCurrentHitPoints>, DynamicBuffer<DamageThisFrame>>()
+            .WithPresent<DestroyEntityFlag>().WithEntityAccess())
         {
             // Skip entities that received no damage this frame
             if (damageThisFrame.IsEmpty == true) continue;
@@ -21,6 +22,11 @@ partial struct ProcessDamageThisFrameSystem : ISystem
             }
 
             damageThisFrame.Clear();
+
+            if(characterCurrentHitPoints.ValueRO.Value <= 0)
+            {
+               SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, true);
+            }
         }
     }
 }

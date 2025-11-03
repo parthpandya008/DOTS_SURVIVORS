@@ -33,6 +33,8 @@ public class CharacterAuthoring : MonoBehaviour
                 Value = authoring.MaxHitPoints,
             });
             AddBuffer<DamageThisFrame>(entity);
+            AddComponent<DestroyEntityFlag>(entity);
+            SetComponentEnabled<DestroyEntityFlag>(entity, false);
         }
     }
 }
