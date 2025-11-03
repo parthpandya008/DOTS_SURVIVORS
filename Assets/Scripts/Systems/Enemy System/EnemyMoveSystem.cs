@@ -4,31 +4,34 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-partial struct EnemyMoveSystem : ISystem
+namespace Survivors.Game
 {
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state)
+    partial struct EnemyMoveSystem : ISystem
     {
-        var playerEntity = SystemAPI.GetSingletonEntity<PlayerTag>();
-        var playerPosition = SystemAPI.GetComponent<LocalTransform>(playerEntity).Position.xy;
-        var enemyMoveJob = new EnemyMoveJob
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state)
         {
-            PlayerPosition = playerPosition
-        };
+            var playerEntity = SystemAPI.GetSingletonEntity<PlayerTag>();
+            var playerPosition = SystemAPI.GetComponent<LocalTransform>(playerEntity).Position.xy;
+            var enemyMoveJob = new EnemyMoveJob
+            {
+                PlayerPosition = playerPosition
+            };
 
-        state.Dependency = enemyMoveJob.ScheduleParallel(state.Dependency);
+            state.Dependency = enemyMoveJob.ScheduleParallel(state.Dependency);
+        }
     }
-}
 
-[WithAll(typeof(EnemyTag))]
-[BurstCompile]
-public partial struct EnemyMoveJob: IJobEntity
-{
-    public float2 PlayerPosition;
-    
-    public void Execute(ref CharacterMoveDirection moveDirection, in LocalTransform localTransform)
+    [WithAll(typeof(EnemyTag))]
+    [BurstCompile]
+    public partial struct EnemyMoveJob : IJobEntity
     {
-        var playerDirection = PlayerPosition - localTransform.Position.xy;
-        moveDirection.Value = math.normalize (playerDirection);
+        public float2 PlayerPosition;
+
+        public void Execute(ref CharacterMoveDirection moveDirection, in LocalTransform localTransform)
+        {
+            var playerDirection = PlayerPosition - localTransform.Position.xy;
+            moveDirection.Value = math.normalize(playerDirection);
+        }
     }
 }

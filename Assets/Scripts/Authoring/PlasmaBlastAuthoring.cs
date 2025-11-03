@@ -1,29 +1,34 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class PlasmaBlastAuthoring : MonoBehaviour
+namespace Survivors.Game
 {
-    public float MoveSpeed;
-    public int AttackDamage;
-
-    public class Baker : Baker<PlasmaBlastAuthoring>
+    public class PlasmaBlastAuthoring : MonoBehaviour
     {
-        public override void Bake(PlasmaBlastAuthoring authoring)
+        public float MoveSpeed;
+        public int AttackDamage;
+
+        public class Baker : Baker<PlasmaBlastAuthoring>
         {
-           var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new PlasmaBlastData
+            public override void Bake(PlasmaBlastAuthoring authoring)
             {
-                AttackDamage = authoring.AttackDamage,
-                MoveSpeed = authoring.MoveSpeed,
-            });
-            AddComponent<DestroyEntityFlag>(entity);
-            SetComponentEnabled<DestroyEntityFlag>(entity, false);
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new PlasmaBlastData
+                {
+                    AttackDamage = authoring.AttackDamage,
+                    MoveSpeed = authoring.MoveSpeed,
+                });
+                AddComponent<DestroyEntityFlag>(entity);
+                SetComponentEnabled<DestroyEntityFlag>(entity, false);
+            }
         }
     }
-}
 
-public struct PlasmaBlastData : IComponentData
-{
-    public float MoveSpeed;
-    public int AttackDamage;
+     #region ComponentData
+    public struct PlasmaBlastData : IComponentData
+    {
+        public float MoveSpeed;
+        public int AttackDamage;
+    }
+    #endregion
 }

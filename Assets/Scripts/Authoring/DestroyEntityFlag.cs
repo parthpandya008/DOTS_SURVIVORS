@@ -1,6 +1,9 @@
 using Unity.Entities;
 
-public struct DestroyEntityFlag : IComponentData, IEnableableComponent
+namespace Survivors.Game
 {
-    
+    public struct DestroyEntityFlag : IComponentData, IEnableableComponent
+    {
+
+    }
 }

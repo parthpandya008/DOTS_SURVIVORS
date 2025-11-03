@@ -2,25 +2,25 @@ using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
 
-partial struct GlobalTimeUpdateSystem : ISystem
+namespace Survivors.Game
 {
-    private static int globalTimeShaderPropertyId;
-
-    
-    public void OnCreate(ref SystemState state)
+    partial struct GlobalTimeUpdateSystem : ISystem
     {
-        globalTimeShaderPropertyId = Shader.PropertyToID("_GlobalTime");
-    }
+        private static int globalTimeShaderPropertyId;
 
-    
-    public void OnUpdate(ref SystemState state)
-    {
-        Shader.SetGlobalFloat(globalTimeShaderPropertyId, (float)SystemAPI.Time.ElapsedTime);
-    }
+        public void OnCreate(ref SystemState state)
+        {
+            globalTimeShaderPropertyId = Shader.PropertyToID("_GlobalTime");
+        }
 
-   
-    public void OnDestroy(ref SystemState state)
-    {
-        
+        public void OnUpdate(ref SystemState state)
+        {
+            Shader.SetGlobalFloat(globalTimeShaderPropertyId, (float)SystemAPI.Time.ElapsedTime);
+        }
+
+        public void OnDestroy(ref SystemState state)
+        {
+
+        }
     }
 }

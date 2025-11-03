@@ -1,16 +1,19 @@
 using UnityEngine;
 
-public class CameraTargetSingleton : MonoBehaviour
+namespace Survivors.Game
 {
-   public static CameraTargetSingleton Instance;
-
-    //Assign the singleton instance in the dirty way
-    private void Awake()
+    public class CameraTargetSingleton : MonoBehaviour
     {
-        if (Instance != null)
+        public static CameraTargetSingleton Instance;
+
+        //Assign the singleton instance in the dirty way
+        private void Awake()
         {
-            Destroy(Instance);
+            if (Instance != null)
+            {
+                Destroy(Instance);
+            }
+            Instance = this;
         }
-        Instance = this;
     }
 }

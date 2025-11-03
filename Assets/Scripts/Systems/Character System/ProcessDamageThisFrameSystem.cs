@@ -1,31 +1,34 @@
 using Unity.Burst;
 using Unity.Entities;
 
-//Apply all "damage " collected the player (by all collided enemies) this frame,
-//then clear the buffer so it doesn't persist into the next frame.
-partial struct ProcessDamageThisFrameSystem : ISystem
+namespace Survivors.Game
 {
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state)
+    //Apply all "damage " collected the player (by all collided enemies) this frame,
+    //then clear the buffer so it doesn't persist into the next frame.
+    partial struct ProcessDamageThisFrameSystem : ISystem
     {
-        foreach(var (characterCurrentHitPoints,damageThisFrame, entity) in 
-            SystemAPI.Query<RefRW<CharacterCurrentHitPoints>, DynamicBuffer<DamageThisFrame>>()
-            .WithPresent<DestroyEntityFlag>().WithEntityAccess())
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state)
         {
-            // Skip entities that received no damage this frame
-            if (damageThisFrame.IsEmpty == true) continue;
-
-            // Apply each damage event stored in the buffer
-            foreach (var damage in damageThisFrame)
+            foreach (var (characterCurrentHitPoints, damageThisFrame, entity) in
+                SystemAPI.Query<RefRW<CharacterCurrentHitPoints>, DynamicBuffer<DamageThisFrame>>()
+                .WithPresent<DestroyEntityFlag>().WithEntityAccess())
             {
-                characterCurrentHitPoints.ValueRW.Value -= damage.Value;
-            }
+                // Skip entities that received no damage this frame
+                if (damageThisFrame.IsEmpty == true) continue;
 
-            damageThisFrame.Clear();
+                // Apply each damage event stored in the buffer
+                foreach (var damage in damageThisFrame)
+                {
+                    characterCurrentHitPoints.ValueRW.Value -= damage.Value;
+                }
 
-            if(characterCurrentHitPoints.ValueRO.Value <= 0)
-            {
-               SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, true);
+                damageThisFrame.Clear();
+
+                if (characterCurrentHitPoints.ValueRO.Value <= 0)
+                {
+                    SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, true);
+                }
             }
         }
     }

@@ -3,26 +3,29 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 
-[UpdateInGroup(typeof(InitializationSystemGroup))]
-partial struct CharacterInitSystem : ISystem
+namespace Survivors.Game
 {
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state)
+    [UpdateInGroup(typeof(InitializationSystemGroup))]
+    partial struct CharacterInitSystem : ISystem
     {
-        foreach(var (physicsMass, initFlag) in 
-            SystemAPI.Query<RefRW <PhysicsMass>, EnabledRefRW <InitCharacterFlag>>())
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state)
         {
-            //Set InverseInertia, so the player doen't rotate on collission from the 
-            physicsMass.ValueRW.InverseInertia = float3.zero;
-            
-            //Set InitCharacterFlag component flase, so that this doesn't set every time
-            initFlag.ValueRW = false;
-        }
-    }
+            foreach (var (physicsMass, initFlag) in
+                SystemAPI.Query<RefRW<PhysicsMass>, EnabledRefRW<InitCharacterFlag>>())
+            {
+                //Set InverseInertia, so the player doen't rotate on collission from the 
+                physicsMass.ValueRW.InverseInertia = float3.zero;
 
-    [BurstCompile]
-    public void OnDestroy(ref SystemState state)
-    {
-        
+                //Set InitCharacterFlag component flase, so that this doesn't set every time
+                initFlag.ValueRW = false;
+            }
+        }
+
+        [BurstCompile]
+        public void OnDestroy(ref SystemState state)
+        {
+
+        }
     }
 }
