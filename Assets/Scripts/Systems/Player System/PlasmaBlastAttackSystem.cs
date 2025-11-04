@@ -109,7 +109,7 @@ namespace Survivors.Game
             enemyDynamicDamageBuffer.Add(new DamageThisFrame { Value = attackDamage });
 
             // Mark the PlasmaBlast entity for destruction
-            DestroyEntityLookUp.SetComponentEnabled(plasmaBlastEntity, true);
+           // DestroyEntityLookUp.SetComponentEnabled(plasmaBlastEntity, true);
         }
     }
 }

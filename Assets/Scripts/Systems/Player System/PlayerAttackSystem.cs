@@ -23,6 +23,7 @@ namespace Survivors.Game
             var ecbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
             var ecb = ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
             var physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
+            var plasmaDataLookup = SystemAPI.GetComponentLookup<PlasmaBlastData>(true);
 
 
             foreach (var (expirationTimeStamp, attackData, transform)
@@ -81,7 +82,14 @@ namespace Survivors.Game
 
                 // Instantiate the attack prefab and set its position and rotation
                 var newAttack = ecb.Instantiate(attackData.AttackPrefab);
+                var plasmaData = plasmaDataLookup[attackData.AttackPrefab];
+
                 ecb.SetComponent(newAttack, LocalTransform.FromPositionRotation(spawnPosition, spawnRotation));
+                ecb.SetComponent(newAttack, new EntityLifetime
+                {
+                    DestroyAtTime = elapasedTime + plasmaData.LifeSpanDuration, 
+                });
+
 
                 // Update the cooldown expiration timestamp for the entity
                 expirationTimeStamp.ValueRW.Value = elapasedTime + attackData.CoolDownTime;

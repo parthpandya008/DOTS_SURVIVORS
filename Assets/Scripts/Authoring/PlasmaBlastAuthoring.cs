@@ -7,6 +7,7 @@ namespace Survivors.Game
     {
         public float MoveSpeed;
         public int AttackDamage;
+        public float LifeSpanDuration;
 
         public class Baker : Baker<PlasmaBlastAuthoring>
         {
@@ -17,9 +18,11 @@ namespace Survivors.Game
                 {
                     AttackDamage = authoring.AttackDamage,
                     MoveSpeed = authoring.MoveSpeed,
+                    LifeSpanDuration = authoring.LifeSpanDuration,
                 });
                 AddComponent<DestroyEntityFlag>(entity);
                 SetComponentEnabled<DestroyEntityFlag>(entity, false);
+                AddComponent<EntityLifetime>(entity);
             }
         }
     }
@@ -29,6 +32,7 @@ namespace Survivors.Game
     {
         public float MoveSpeed;
         public int AttackDamage;
+        public float LifeSpanDuration;
     }
     #endregion
 }
