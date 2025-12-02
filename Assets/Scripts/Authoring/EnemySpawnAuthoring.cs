@@ -33,6 +33,7 @@ namespace Survivors.Game
         }
     }
 
+    #region ComponentData
     public struct EnemySpawnData: IComponentData
     {
         public Entity EnemyPrefab;
@@ -45,6 +46,6 @@ namespace Survivors.Game
         public float SpawnTimer;
         public Random Random;
     }
-
+    #endregion
 }
 

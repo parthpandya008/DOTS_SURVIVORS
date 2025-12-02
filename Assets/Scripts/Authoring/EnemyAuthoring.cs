@@ -8,6 +8,7 @@ namespace Survivors.Game
     {
         public float AttackDamage;
         public float CoolDownTime;
+        public GameObject GemPrefab;
 
         public class Baker : Baker<EnemyAuthoring>
         {
@@ -23,6 +24,11 @@ namespace Survivors.Game
                 });
                 AddComponent<EnemyCoolDownExpirationTimeStamp>(entity);
                 SetComponentEnabled<EnemyCoolDownExpirationTimeStamp>(entity, false);
+
+                AddComponent(entity, new GemPrefab
+                {
+                    Value = GetEntity(authoring.GemPrefab, TransformUsageFlags.Dynamic),
+                });
             }
         }
     }
@@ -40,6 +46,11 @@ namespace Survivors.Game
     public struct EnemyCoolDownExpirationTimeStamp : IComponentData, IEnableableComponent
     {
         public double Value;
+    }
+
+    public struct GemPrefab : IComponentData
+    {
+        public Entity Value;
     }
     #endregion
 }
