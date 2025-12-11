@@ -39,6 +39,8 @@ namespace Survivors.Game
                 });
 
                 AddComponent<PlayerCoolDownExpirationTimestamp>(entity);
+                AddComponent<GemsCollectedCount>(entity);
+                AddComponent<UpdateGemUIFlag>(entity);
             }
         }
     }
@@ -81,5 +83,14 @@ namespace Survivors.Game
     {
         public double Value;
     }
+
+    //Hold the collected gems count
+    public struct GemsCollectedCount : IComponentData
+    {
+        public int Value;
+    }
+
+    public struct UpdateGemUIFlag : IComponentData, IEnableableComponent { }
+
     #endregion
 }

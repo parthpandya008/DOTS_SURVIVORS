@@ -929,11 +929,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: aa3f64d8-72a2-48bd-83e2-5dda82aeea5f
+  cloudProjectId: af36408e-a0d1-47f5-bf24-b71ebb747857
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: SurvivorsTutorial-Project
-  organizationId: parthpandyalnw
+  organizationId: parthpandya
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

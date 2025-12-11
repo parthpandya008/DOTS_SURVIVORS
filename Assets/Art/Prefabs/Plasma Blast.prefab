@@ -125,5 +125,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlasmaBlastAuthoring
   MoveSpeed: 7
-  AttackDamage: 4
+  AttackDamage: 5
   LifeSpanDuration: 15
