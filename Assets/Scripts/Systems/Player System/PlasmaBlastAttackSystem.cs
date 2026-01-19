@@ -44,6 +44,8 @@ namespace Survivors.Game
             // Retrieve the SimulationSingleton for scheduling the job
             var simulationSingleton = SystemAPI.GetSingleton<SimulationSingleton>();
             state.Dependency = attackJob.Schedule(simulationSingleton, state.Dependency);
+           
+            /* Uncomment the following to check the logs
             // For debugging: force complete immediately so we can log results this frame
             // (in production you usually don’t Complete here, to keep jobs async)
             state.Dependency.Complete();
@@ -52,6 +54,7 @@ namespace Survivors.Game
             {
                 UnityEngine.Debug.Log($"PlasmaBlastAttackSystem Collision detected with Entity: {entity.Index}");
             }
+            */
         }
 
         [BurstCompile]
@@ -104,9 +107,12 @@ namespace Survivors.Game
 
             var attackDamage = PlasmaBlastLookUp[plasmaBlastEntity].AttackDamage;
 
+            
             // Get the dynamic buffer belonging to this particular Enemy entity and add the damage
             var enemyDynamicDamageBuffer = DammageBufferLookup[enemyEntity];
             enemyDynamicDamageBuffer.Add(new DamageThisFrame { Value = attackDamage });
+            
+
 
             // Mark the PlasmaBlast entity for destruction
            // DestroyEntityLookUp.SetComponentEnabled(plasmaBlastEntity, true);

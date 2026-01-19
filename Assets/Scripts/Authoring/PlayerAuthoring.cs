@@ -3,6 +3,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Rendering;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Survivors.Game
 {
@@ -12,6 +13,7 @@ namespace Survivors.Game
         public float CoolDownTime;
         public float DetectationSize;
         public CollisionFilter CollisionFilter;
+        public GameObject UIPrefab;
 
         private class Baker : Baker<PlayerAuthoring>
         {
@@ -41,6 +43,11 @@ namespace Survivors.Game
                 AddComponent<PlayerCoolDownExpirationTimestamp>(entity);
                 AddComponent<GemsCollectedCount>(entity);
                 AddComponent<UpdateGemUIFlag>(entity);
+
+                AddComponent(entity, new PlayerWorldUIPrefab
+                {
+                    Value = authoring.UIPrefab
+                });
             }
         }
     }
@@ -91,6 +98,17 @@ namespace Survivors.Game
     }
 
     public struct UpdateGemUIFlag : IComponentData, IEnableableComponent { }
+
+    public struct PlayerWorldUI: ICleanupComponentData
+    {
+        public UnityObjectRef<Transform> CanvasTransform;
+        public UnityObjectRef<Slider> HealthBar;
+    }
+
+    public struct PlayerWorldUIPrefab: IComponentData
+    {
+        public UnityObjectRef<GameObject> Value;
+    }
 
     #endregion
 }

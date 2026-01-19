@@ -45,7 +45,6 @@ namespace Survivors.Game
                 // Disable cooldown if its expiration timestamp has passed
                 // This ensures enemies can attack again after cooldown
                 if (expirationTimeStamp.Value > elapsedTime) continue;
-
                 cooldownEnabled.ValueRW = false;
             }
 
@@ -67,19 +66,21 @@ namespace Survivors.Game
             var simulationSingleton = SystemAPI.GetSingleton<SimulationSingleton>();
             state.Dependency = attackJob.Schedule(simulationSingleton, state.Dependency);
 
+            /*
             // For debugging: force complete immediately so we can log results this frame
             // (in production you usually don’t Complete here, to keep jobs async)
             state.Dependency.Complete();
 
-            /*foreach (var entity in logEntities)
+            foreach (var entity in logEntities)
             {
                 UnityEngine.Debug.Log($"Collision detected with EntityA: {entity}");
-            }*/
+            }
+            */
         }
     }
 
     [BurstCompile]
-    public struct EnemyAttackJob : ICollisionEventsJob
+    public struct EnemyAttackJob : ITriggerEventsJob
     {
         // Lookups allow random access to components during job execution
         [ReadOnly]
@@ -95,7 +96,7 @@ namespace Survivors.Game
 
         public NativeList<Entity> LogEntities;
 
-        public void Execute(CollisionEvent collisionEvent)
+        public void Execute(TriggerEvent collisionEvent)
         {
             //UnityEngine.Debug.Log(" collisionEvent.EntityA " + collisionEvent.EntityA);
             Entity playerEntity;

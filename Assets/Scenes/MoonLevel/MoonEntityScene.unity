@@ -289,6 +289,7 @@ MonoBehaviour:
   AttackPrefab: {fileID: 6160874669317567272, guid: dfaed48485b8f20439458f101b7c140a, type: 3}
   CoolDownTime: 1
   DetectationSize: 5
+  UIPrefab: {fileID: 6848332979229617546, guid: 1b8519ce5d7dc6e48bb4d207983180ca, type: 3}
 --- !u!1 &63728718
 GameObject:
   m_ObjectHideFlags: 0

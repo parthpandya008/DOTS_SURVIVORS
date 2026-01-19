@@ -69,6 +69,15 @@ namespace Survivors.UI
             SetEcsEnabled(!_isPaused);
         }
 
+        /* Most of the game logic runs inside two main system groups:
+         1. InitializationSystemGroup
+         2. SimulationSystemGroup
+        
+         These groups include both Unity's built-in systems (transforms, physics, etc.)
+         and your custom gameplay systems.
+        
+         To pause the game, you can disable these two system groups.
+         Doing so prevents all systems inside them from updating. */
         private void SetEcsEnabled(bool shouldEnable)
         {
             var defaultWorld = World.DefaultGameObjectInjectionWorld;
