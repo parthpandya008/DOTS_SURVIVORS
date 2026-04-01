@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.Physics;
 using UnityEngine;
 using Random = Unity.Mathematics.Random;
 
@@ -8,9 +9,8 @@ namespace Survivors.Game
     {
         public GameObject BossPrefab;
         public float SpawnDelay; // seconds after game start before boss spawns
-        public float SpawnDistance; // distance from player when spawned
-        public uint RandomSeed;
-
+        public float SpawnDistance; // distance from player when spawned        
+       
         private class Baker : Baker<BossSpawnAuthoring>
         {
             public override void Bake(BossSpawnAuthoring authoring)
@@ -23,11 +23,10 @@ namespace Survivors.Game
                     SpawnDelay = authoring.SpawnDelay,
                     SpawnDistance = authoring.SpawnDistance
                 });
-
-                //AddComponent<BossSpawnState>(entity);
+                
                 AddComponent(entity, new BossSpawnState
-                {
-                    Random = Random.CreateFromIndex(authoring.RandomSeed)
+                {                   
+                    Random = Random.CreateFromIndex((uint)UnityEngine.Random.Range(0, 360))
                 });
             }
         }

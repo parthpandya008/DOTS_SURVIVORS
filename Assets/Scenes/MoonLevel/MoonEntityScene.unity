@@ -657,8 +657,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Survivors.Game.BossSpawnAuthoring
   BossPrefab: {fileID: 1130683410920229706, guid: 09bea3b8e26e51245bf93778b21a869a, type: 3}
-  SpawnDelay: 5
-  SpawnDistance: 5
+  SpawnDelay: 10
+  SpawnDistance: 10
 --- !u!4 &328001804
 Transform:
   m_ObjectHideFlags: 0
@@ -1474,7 +1474,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1353618076
 MonoBehaviour:
   m_ObjectHideFlags: 0
