@@ -4,9 +4,10 @@ using UnityEngine;
 
 namespace Survivors.Game
 {
+    [RequireComponent(typeof(URPBaseColorAuthoring))]
     public class FadeOutAuthoring : MonoBehaviour
     {
-        [Header("Fade Out")]       
+        [Header("Fade Out")]
         public float FadeOutDuration = 1f;
         public bool DestroyOnFadeOutComplete;
 
@@ -21,14 +22,9 @@ namespace Survivors.Game
                     Duration = authoring.FadeOutDuration,
                     DestroyOnComplete = authoring.DestroyOnFadeOutComplete
                 });
-                // Starts disabled — enable via ECB when you want the fade to begin
-                SetComponentEnabled<FadeOutData>(entity, false);
 
-                // add URPMaterialPropertyBaseColor so the system can write alpha
-                AddComponent(entity, new URPMaterialPropertyBaseColor
-                {
-                    Value = new Unity.Mathematics.float4(1, 1, 1, 1)
-                });
+                //Starts disabled — enable via ECB when you want the fade to begin
+                SetComponentEnabled<FadeOutData>(entity, false);                
             }
         }
 

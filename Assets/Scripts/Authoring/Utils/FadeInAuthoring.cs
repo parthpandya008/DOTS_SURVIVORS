@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Survivors.Game
 {
+    [RequireComponent(typeof(URPBaseColorAuthoring))]
     public class FadeInAuthoring : MonoBehaviour
     {
         [Header("Fade In")]        
@@ -17,13 +18,7 @@ namespace Survivors.Game
                 AddComponent(entity, new FadeInData
                 {
                     Duration = authoring.FadeInDuration
-                });
-
-                // add URPMaterialPropertyBaseColor so the system can write alpha
-                AddComponent(entity, new URPMaterialPropertyBaseColor
-                {
-                    Value = new Unity.Mathematics.float4(1, 1, 1, 0)
-                });
+                });                                                                                               
             }
         }
        
