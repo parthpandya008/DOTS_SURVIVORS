@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 205220894920420564}
   - component: {fileID: 1235701858292487795}
   - component: {fileID: 5582680435070624176}
+  - component: {fileID: 997030723795477905}
   - component: {fileID: 1160476741294393641}
   m_Layer: 7
   m_Name: Alien-Boss
@@ -172,6 +173,18 @@ Rigidbody:
   m_Interpolate: 2
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &997030723795477905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130683410920229706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c3ab04a9b3feb545b332d5c61a2bd16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Survivors.Game.FadeAuthoring
 --- !u!114 &1160476741294393641
 MonoBehaviour:
   m_ObjectHideFlags: 0

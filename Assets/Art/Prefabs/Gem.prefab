@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 1650845293963555737}
   - component: {fileID: 8874088704067091923}
   - component: {fileID: 416744096254263387}
+  - component: {fileID: 3174613699041337212}
+  - component: {fileID: 3658431842796533218}
   m_Layer: 10
   m_Name: Gem
   m_TagString: Untagged
@@ -68,7 +70,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 386cdaf3298f3c840922a4311bc9208e, type: 2}
+  - {fileID: 2100000, guid: a094b6c8a350f3c4a851460158a441e9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -90,6 +92,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!135 &8874088704067091923
 SphereCollider:
@@ -124,3 +127,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e49b6ab795ab5b40a8f8d64670bcc34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GemAuthoring
+--- !u!114 &3174613699041337212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297017805225368907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c3ab04a9b3feb545b332d5c61a2bd16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Survivors.Game.URPBaseColorAuthoring
+--- !u!114 &3658431842796533218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297017805225368907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00c87ebad0f5ca44b8075a60e19489b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Survivors.Game.FadeInAuthoring
+  FadeInDuration: 1
