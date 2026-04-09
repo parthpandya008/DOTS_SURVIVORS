@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Survivors.Game;
 using Unity.Burst;
 using Unity.Entities;
@@ -26,35 +27,9 @@ namespace Survivors.Game
 
             var fadeOutJob = new FadeOutJob
             {
-                DeltaTime = deltaTime,
-                ECB = ecb.AsParallelWriter()
+                DeltaTime = deltaTime,                
             };
-            state.Dependency = fadeOutJob.ScheduleParallel(state.Dependency);
-
-            /*foreach (var (fadeOutData, baseColor, fadeOutDataEnabled, entity)
-                in SystemAPI.Query<RefRW<FadeOutData>,
-                    RefRW<URPMaterialPropertyBaseColor>,
-                    EnabledRefRW<FadeOutData>
-                    >().WithEntityAccess())
-            {
-                fadeOutData.ValueRW.Elapsed += deltaTime;
-                var alpha = 1 - math.saturate(fadeOutData.ValueRO.Elapsed / fadeOutData.ValueRO.Duration);
-                baseColor.ValueRW.Value = new float4(1f, 1f, 1f, alpha);
-
-                // When fully faded out
-                if (alpha <= 0)
-                {
-                    // Reset timer and disable fade component
-                    fadeOutData.ValueRW.Elapsed = 0;
-                    fadeOutDataEnabled.ValueRW = false;
-
-                    if (fadeOutData.ValueRO.DestroyOnComplete)
-                    {
-                        //mark entity for destruction
-                        ecb.SetComponentEnabled<DestroyEntityFlag>(entity, true);
-                    }
-                }
-            }*/
+            state.Dependency = fadeOutJob.ScheduleParallel(state.Dependency);            
         }
 
         [BurstCompile]
@@ -64,16 +39,21 @@ namespace Survivors.Game
         }
     }
 
+    [WithAll(typeof(FadeOutData))]
+    /*TODO: 1. Currently this job won't support the fade out for the entity which doens't has DestroyEntityFlag
+            2. Need to create and saperate job for the [WithNone(typeof(DestroyEntityFlag))]
+            3. To avoid duplicating the alpha logic, extract it into a static helper*/
+    [WithPresent(typeof(DestroyEntityFlag))]
     public partial struct FadeOutJob: IJobEntity
     {
-        public float DeltaTime;
-        public EntityCommandBuffer.ParallelWriter ECB;
+        public float DeltaTime;        
 
         public void Execute([ChunkIndexInQuery] int chunkIndex,
                             Entity entity,
                             RefRW<FadeOutData> fadeOutData,
                             RefRW<URPMaterialPropertyBaseColor> baseColor,
-                            EnabledRefRW<FadeOutData> fadeOutDataEnabled)
+                            EnabledRefRW<FadeOutData> fadeOutDataEnabled,
+                            EnabledRefRW<DestroyEntityFlag> destroyFlagEnabled)
         {
             fadeOutData.ValueRW.Elapsed += DeltaTime;
             var alpha = 1 - math.saturate(fadeOutData.ValueRO.Elapsed / fadeOutData.ValueRO.Duration);
@@ -86,10 +66,9 @@ namespace Survivors.Game
                 fadeOutData.ValueRW.Elapsed = 0;
                 fadeOutDataEnabled.ValueRW = false;
 
-                if (fadeOutData.ValueRO.DestroyOnComplete)
+                if(fadeOutData.ValueRO.DestroyOnComplete)
                 {
-                    //mark entity for destruction
-                    ECB.SetComponentEnabled<DestroyEntityFlag>(chunkIndex, entity, true);
+                    destroyFlagEnabled.ValueRW = true;
                 }
             }
         }

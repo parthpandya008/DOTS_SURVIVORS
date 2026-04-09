@@ -27,7 +27,14 @@ namespace Survivors.Game
 
                 if (characterCurrentHitPoints.ValueRO.Value <= 0)
                 {
-                    SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, true);
+                    if(SystemAPI.HasComponent<FadeOutData>(entity))
+                    {
+                        SystemAPI.SetComponentEnabled<FadeOutData>(entity, true);
+                    }
+                    else
+                    {
+                        SystemAPI.SetComponentEnabled<DestroyEntityFlag>(entity, true);
+                    }                    
                 }
             }
         }

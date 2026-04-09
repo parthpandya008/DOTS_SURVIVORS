@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 205220894920420564}
   - component: {fileID: 1235701858292487795}
   - component: {fileID: 5582680435070624176}
+  - component: {fileID: -1697493940705397509}
+  - component: {fileID: 1218720073718722360}
   m_Layer: 7
   m_Name: Alien
   m_TagString: Untagged
@@ -92,6 +94,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &982440492619082928
 BoxCollider:
@@ -170,3 +173,29 @@ Rigidbody:
   m_Interpolate: 2
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-1697493940705397509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130683410920229706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c3ab04a9b3feb545b332d5c61a2bd16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Survivors.Game.URPBaseColorAuthoring
+--- !u!114 &1218720073718722360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130683410920229706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8405fd69d556b418835dfc5bea2eea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Survivors.Game.FadeOutAuthoring
+  FadeOutDuration: 0.5
+  DestroyOnFadeOutComplete: 1

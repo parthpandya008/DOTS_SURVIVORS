@@ -151,4 +151,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00c87ebad0f5ca44b8075a60e19489b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Survivors.Game.FadeInAuthoring
-  FadeInDuration: 1
+  FadeInDuration: 0.5

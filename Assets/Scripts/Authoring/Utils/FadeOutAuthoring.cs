@@ -26,17 +26,17 @@ namespace Survivors.Game
                 //Starts disabled — enable via ECB when you want the fade to begin
                 SetComponentEnabled<FadeOutData>(entity, false);                
             }
-        }
-
-        #region ComponentData
-
-        public struct FadeOutData : IComponentData, IEnableableComponent
-        {
-            public float Elapsed;
-            public float Duration;
-            public bool DestroyOnComplete;
-        }
-
-        #endregion
+        }        
     }
+
+    #region ComponentData
+
+    public struct FadeOutData : IComponentData, IEnableableComponent
+    {
+        public float Elapsed;
+        public float Duration;
+        public bool DestroyOnComplete;
+    }
+
+    #endregion
 }
