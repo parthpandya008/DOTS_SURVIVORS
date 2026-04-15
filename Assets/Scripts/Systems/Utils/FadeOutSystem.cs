@@ -48,8 +48,7 @@ namespace Survivors.Game
     {
         public float DeltaTime;        
 
-        public void Execute([ChunkIndexInQuery] int chunkIndex,
-                            Entity entity,
+        public void Execute(Entity entity,
                             RefRW<FadeOutData> fadeOutData,
                             RefRW<URPMaterialPropertyBaseColor> baseColor,
                             EnabledRefRW<FadeOutData> fadeOutDataEnabled,
