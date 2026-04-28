@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 5582680435070624176}
   - component: {fileID: -1697493940705397509}
   - component: {fileID: 1218720073718722360}
+  - component: {fileID: 2603544205680365162}
   m_Layer: 7
   m_Name: Alien
   m_TagString: Untagged
@@ -199,3 +200,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Survivors.Game.FadeOutAuthoring
   FadeOutDuration: 0.5
   DestroyOnFadeOutComplete: 1
+--- !u!114 &2603544205680365162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130683410920229706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b7f8602e24748a47b005ab351f8aafa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Survivors.Game.FlashAuthoring
+  FlashSpeed: 10
+  FlashColor: {r: 5.9921536, g: 0, b: 0, a: 1}

@@ -36,8 +36,11 @@ namespace Survivors.Game
             {
                 PlasmaBlastLookUp = SystemAPI.GetComponentLookup<PlasmaBlastData>(true), // Lookup for PlasmaBlast data
                 EnemyLookUp = SystemAPI.GetComponentLookup<EnemyTag>(true),// Lookup for enemy tags
-                DammageBufferLookup = SystemAPI.GetBufferLookup<DamageThisFrame>(), // Access dynamic buffer for handling damage
                 DestroyEntityLookUp = SystemAPI.GetComponentLookup<DestroyEntityFlag>(), // Lookup for entities flagged for destruction
+                FlashAmountLookUp = SystemAPI.GetComponentLookup<FlashAmount>(), // Lookup for FlashAmount 
+
+                DammageBufferLookup = SystemAPI.GetBufferLookup<DamageThisFrame>(), // Access dynamic buffer for handling damage
+
                 LogEntities = logEntities,
             };
 
@@ -74,10 +77,10 @@ namespace Survivors.Game
         [Unity.Collections.ReadOnly]
         public ComponentLookup<EnemyTag> EnemyLookUp;
         public ComponentLookup<DestroyEntityFlag> DestroyEntityLookUp;
+        public ComponentLookup<FlashAmount> FlashAmountLookUp;
 
         // Dynamic buffer for storing damage events to be applied to enemies
         public BufferLookup<DamageThisFrame> DammageBufferLookup;
-
 
         public NativeList<Entity> LogEntities;
 
@@ -110,9 +113,19 @@ namespace Survivors.Game
             
             // Get the dynamic buffer belonging to this particular Enemy entity and add the damage
             var enemyDynamicDamageBuffer = DammageBufferLookup[enemyEntity];
-            enemyDynamicDamageBuffer.Add(new DamageThisFrame { Value = attackDamage });
+            enemyDynamicDamageBuffer.Add(new DamageThisFrame 
+            { 
+                Value = attackDamage 
+            });
             
-
+            if(FlashAmountLookUp.HasComponent(enemyEntity))
+            {
+                // We check if the enemy has the component to avoid errors, then set it to 1
+                FlashAmountLookUp[enemyEntity] = new FlashAmount
+                {
+                    Value = 1.0f
+                };
+            }
 
             // Mark the PlasmaBlast entity for destruction
            // DestroyEntityLookUp.SetComponentEnabled(plasmaBlastEntity, true);

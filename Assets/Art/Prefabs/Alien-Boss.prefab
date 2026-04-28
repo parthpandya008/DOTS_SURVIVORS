@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 5582680435070624176}
   - component: {fileID: 997030723795477905}
   - component: {fileID: 1160476741294393641}
+  - component: {fileID: 7821380047004895899}
   m_Layer: 7
   m_Name: Alien-Boss
   m_TagString: Untagged
@@ -198,3 +199,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Survivors.Game.FadeInAuthoring
   FadeInDuration: 1
+--- !u!114 &7821380047004895899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130683410920229706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b7f8602e24748a47b005ab351f8aafa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Survivors.Game.FlashAuthoring
+  FlashSpeed: 5
+  FlashColor: {r: 8, g: 1.3242487, b: 0.22641373, a: 1}

@@ -1488,7 +1488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Survivors.Game.EnemySpawnAuthoring
   EnemyPrefab: {fileID: 1130683410920229706, guid: 0c98d659db1370b46a11c7b817c0518c, type: 3}
-  SpawnInterval: 1
+  SpawnInterval: 5
   SpawnDistance: 25
   RandomSeed: 1
 --- !u!4 &1353618077
