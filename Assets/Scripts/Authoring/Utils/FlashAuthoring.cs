@@ -39,6 +39,7 @@ namespace Survivors.Game
                 {
                     Value = authoring.FlashSpeed
                 });
+                SetComponentEnabled<FlashSpeedData>(entity, false);
             }
         }
     }
@@ -59,10 +60,16 @@ namespace Survivors.Game
 
     /*
      * FlashAmount has the [MaterialProperty] tag. That tag tells Unity to copy that exact chunk of memory directly to the GPU every frame. 
-     * If we put "Speed" in there, we are sending useless data to the graphics card, 
-     * wasting memory bandwidth.
+     * If we put "Speed" in there, we are sending useless data to the graphics card, wasting memory bandwidth.
+     * Why me made this as IEnableableComponent not FlashAmount
+     *      If [MaterialProperty] is attached on the component Unity's rendering system  continuously gather that data from all entities
+     *      and pack it into a special array for the GPU (GPU Instancing).
+     *      So when you enable and disable it would add and remove that component from that special array.
+     *      Dynamically adding and removing material overrides frame-by-frame 
+     *      can cause batch fragmentation, memory reallocation overhead, 
+     *      or even visual flickering as entities jump between different rendering batches.
      */
-    public struct FlashSpeedData : IComponentData
+    public struct FlashSpeedData : IComponentData, IEnableableComponent
     {
         public float Value;
     }

@@ -37,7 +37,9 @@ namespace Survivors.Game
                 PlasmaBlastLookUp = SystemAPI.GetComponentLookup<PlasmaBlastData>(true), // Lookup for PlasmaBlast data
                 EnemyLookUp = SystemAPI.GetComponentLookup<EnemyTag>(true),// Lookup for enemy tags
                 DestroyEntityLookUp = SystemAPI.GetComponentLookup<DestroyEntityFlag>(), // Lookup for entities flagged for destruction
-                FlashAmountLookUp = SystemAPI.GetComponentLookup<FlashAmount>(), // Lookup for FlashAmount 
+                
+                FlashAmountLookUp = SystemAPI.GetComponentLookup<FlashAmount>(false), // Lookup for FlashAmount 
+                FlashSpeedLookUp = SystemAPI.GetComponentLookup<FlashSpeedData>(false), // Lookup for FlashSpeedData 
 
                 DammageBufferLookup = SystemAPI.GetBufferLookup<DamageThisFrame>(), // Access dynamic buffer for handling damage
 
@@ -77,7 +79,9 @@ namespace Survivors.Game
         [Unity.Collections.ReadOnly]
         public ComponentLookup<EnemyTag> EnemyLookUp;
         public ComponentLookup<DestroyEntityFlag> DestroyEntityLookUp;
+        
         public ComponentLookup<FlashAmount> FlashAmountLookUp;
+        public ComponentLookup<FlashSpeedData> FlashSpeedLookUp;
 
         // Dynamic buffer for storing damage events to be applied to enemies
         public BufferLookup<DamageThisFrame> DammageBufferLookup;
@@ -125,6 +129,9 @@ namespace Survivors.Game
                 {
                     Value = 1.0f
                 };
+
+                // 2. Wake up the fade system for this specific enemy
+                FlashSpeedLookUp.SetComponentEnabled(enemyEntity, true);
             }
 
             // Mark the PlasmaBlast entity for destruction
