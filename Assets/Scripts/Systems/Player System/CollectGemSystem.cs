@@ -24,8 +24,11 @@ partial struct CollectGemSystem : ISystem
             GemLookup = SystemAPI.GetComponentLookup<GemTag>(true),
             GemsCollectedCountLookUp = SystemAPI.GetComponentLookup<GemsCollectedCount>(),
             DestroyEntityLookUp = SystemAPI.GetComponentLookup<DestroyEntityFlag>(),
-            UpdateGemUIFlagLookUp = SystemAPI.GetComponentLookup<UpdateGemUIFlag>()
+            UpdateGemUIFlagLookUp = SystemAPI.GetComponentLookup<UpdateGemUIFlag>(),
+            FlashAmountLookUp = SystemAPI.GetComponentLookup<FlashAmount>(),
+            FlashSpeedLookUp = SystemAPI.GetComponentLookup<FlashSpeedData>()
         };
+
 
         // Get the SimulationSingleton instance to access the physics world.
         var simulationSingleton = SystemAPI.GetSingleton<SimulationSingleton>();
@@ -42,6 +45,9 @@ public struct GemCollectJob : ITriggerEventsJob
     public ComponentLookup<DestroyEntityFlag> DestroyEntityLookUp;
     public ComponentLookup<GemsCollectedCount> GemsCollectedCountLookUp;
     public ComponentLookup<UpdateGemUIFlag> UpdateGemUIFlagLookUp;
+
+    public ComponentLookup<FlashAmount> FlashAmountLookUp;
+    public ComponentLookup<FlashSpeedData> FlashSpeedLookUp;
 
     /// <summary>
     /// When a player collides with a gem, the gem is collected, the player's gem count is updated,
@@ -78,6 +84,18 @@ public struct GemCollectJob : ITriggerEventsJob
         UpdateGemUIFlagLookUp.SetComponentEnabled(playerEntity, true);
 
         // Mark the gem entity for destruction.
-        DestroyEntityLookUp.SetComponentEnabled(gemEntity, true); 
+        DestroyEntityLookUp.SetComponentEnabled(gemEntity, true);
+
+        if (FlashAmountLookUp.HasComponent(playerEntity))
+        {
+            // We check if the enemy has the component to avoid errors, then set it to 1
+            FlashAmountLookUp[playerEntity] = new FlashAmount
+            {
+                Value = 1.0f
+            };
+
+            // 2. Wake up the fade system for this specific enemy
+            FlashSpeedLookUp.SetComponentEnabled(playerEntity, true);
+        }
     }
 }

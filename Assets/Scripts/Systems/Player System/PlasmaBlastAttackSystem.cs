@@ -38,8 +38,8 @@ namespace Survivors.Game
                 EnemyLookUp = SystemAPI.GetComponentLookup<EnemyTag>(true),// Lookup for enemy tags
                 DestroyEntityLookUp = SystemAPI.GetComponentLookup<DestroyEntityFlag>(), // Lookup for entities flagged for destruction
                 
-                FlashAmountLookUp = SystemAPI.GetComponentLookup<FlashAmount>(false), // Lookup for FlashAmount 
-                FlashSpeedLookUp = SystemAPI.GetComponentLookup<FlashSpeedData>(false), // Lookup for FlashSpeedData 
+                FlashAmountLookUp = SystemAPI.GetComponentLookup<FlashAmount>(), // Lookup for FlashAmount 
+                FlashSpeedLookUp = SystemAPI.GetComponentLookup<FlashSpeedData>(), // Lookup for FlashSpeedData 
 
                 DammageBufferLookup = SystemAPI.GetBufferLookup<DamageThisFrame>(), // Access dynamic buffer for handling damage
 
