@@ -9,20 +9,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        targetPlatform:                    
+        targetPlatform:                     
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true
+          
       - uses: actions/cache@v3
         with:
           path: Library
           key: Library-${{ matrix.targetPlatform }}
           restore-keys: Library-
+          
       - if: matrix.targetPlatform == 'Android'
         uses: jlumbroso/free-disk-space@v1.3.1
+        
       - uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -30,7 +33,28 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
+          
       - uses: actions/upload-artifact@v4
         with:
           name: Build-${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}*
+          path: build/${{ matrix.targetPlatform }}
+
+      - name: Send Success Email
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "🚀 Unity Build Succeeded: ${{ github.repository }}"
+          to: parthpandya008@gmail.com 
+          from: "GitHub Actions <${{ secrets.MAIL_USERNAME }}>"
+          secure: true
+          body: |
+            Great news! The Windows build for your Unity project completed successfully.
+            
+            You can view the summary page and download the game artifact directly from this link:
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            Commit: "${{ github.event.head_commit.message }}" by ${{ github.actor }}
