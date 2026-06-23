@@ -43,6 +43,8 @@ namespace Survivors.Game
 
                 DammageBufferLookup = SystemAPI.GetBufferLookup<DamageThisFrame>(), // Access dynamic buffer for handling damage
 
+                HitEnemyLookup = SystemAPI.GetBufferLookup<HitEnemy>(), // Access dynamic buffer for tracking hit enemies
+
                 LogEntities = logEntities,
             };
 
@@ -86,6 +88,8 @@ namespace Survivors.Game
         // Dynamic buffer for storing damage events to be applied to enemies
         public BufferLookup<DamageThisFrame> DammageBufferLookup;
 
+        public BufferLookup<HitEnemy> HitEnemyLookup;
+
         public NativeList<Entity> LogEntities;
 
         public void Execute(TriggerEvent triggerEvent)
@@ -112,6 +116,20 @@ namespace Survivors.Game
                 return;
             }
 
+            //Skip if this blast already hit this enemy ---
+            var hitEnemyList = HitEnemyLookup[plasmaBlastEntity];
+            for(int i = 0; i < hitEnemyList.Length; i++)
+            {
+                if (hitEnemyList[i].Value == enemyEntity)
+                {
+                    // This enemy has already been hit by this PlasmaBlast, skip it
+                    return;
+                }
+            }
+
+            // Record this enemy as hit before applying damage
+            hitEnemyList.Add(new HitEnemy { Value = enemyEntity });
+
             var attackDamage = PlasmaBlastLookUp[plasmaBlastEntity].AttackDamage;
 
             
@@ -134,7 +152,7 @@ namespace Survivors.Game
                 FlashSpeedLookUp.SetComponentEnabled(enemyEntity, true);
             }
 
-            // Mark the PlasmaBlast entity for destruction
+            // Mark the PlasmaBlast entity for destruction (For now we don't want as we want to damage multiple enemies)
            // DestroyEntityLookUp.SetComponentEnabled(plasmaBlastEntity, true);
         }
     }
