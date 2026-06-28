@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 2
-  MaxHitPoints: 100
+  MaxHitPoints: 10
 --- !u!114 &1235701858292487795
 MonoBehaviour:
   m_ObjectHideFlags: 0

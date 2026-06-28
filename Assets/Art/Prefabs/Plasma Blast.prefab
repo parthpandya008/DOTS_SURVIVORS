@@ -90,6 +90,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!135 &7458268539057288956
 SphereCollider:
@@ -125,5 +126,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlasmaBlastAuthoring
   MoveSpeed: 7
-  AttackDamage: 5
+  AttackDamage: 2
   LifeSpanDuration: 15
