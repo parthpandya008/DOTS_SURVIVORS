@@ -70,32 +70,52 @@ namespace Survivors.Game
                 endECB.DestroyEntity(entity);
             }
 
-            //  Job: Everything except player 
-            var destroyJob = new DestroyEntityJob
+
+            /* We split this into two jobs 
+               Reason 1: To decouple spawning logic from cleanup logic.
+               Reason 2: For a single job we need to use HasComponent, inside an IJobEntity forces random memory access, 
+                         which destroys the,sequential chunk iteration that makes Burst so fast.
+             */
+            var dropGemJob = new DropGemJob
             {
-                BeginECB = beginECB.AsParallelWriter(),
-                EndECB = endECB.AsParallelWriter(),
-                GemPrefabLookup = SystemAPI.GetComponentLookup<GemPrefab>(true),
-                LocalTransformLookup = SystemAPI.GetComponentLookup<LocalTransform>(true)
+                BeginECB = beginECB.AsParallelWriter()
             };
 
+            state.Dependency = dropGemJob.ScheduleParallel(state.Dependency);
+
+            var destroyJob = new DestroyEntityJob
+            {
+                EndECB = endECB.AsParallelWriter(),
+            };
             state.Dependency = destroyJob.ScheduleParallel(state.Dependency);
-            
         }
     }
 
+    /*NOTE: To maintain determinism, ParallelWriter ECBs must sort their commands by chunk index on the main thread. 
+     *      This sorting adds overhead when destroying only few entities per frame.
+     *      But following structure would be still good to handle massive entities destruction (e.g., AoE attacks)
+     */
+
+    //This JOB ONLY handles spawning gems for enemy
+    [WithAll(typeof(EnemyTag), typeof(DestroyEntityFlag))]
+    [BurstCompile]
+    public partial struct DropGemJob : IJobEntity
+    {
+        public EntityCommandBuffer.ParallelWriter BeginECB;
+        public void Execute([ChunkIndexInQuery] int chunkIndex, in GemPrefab gemPrefab, in LocalTransform enemyTransform)
+        {
+            var newGem = BeginECB.Instantiate(chunkIndex, gemPrefab.Value);
+            BeginECB.SetComponent(chunkIndex, newGem, LocalTransform.FromPosition(enemyTransform.Position));
+        }
+    }
+
+    // This JOB to destroy Prop, Flash, or Enemy, etc.
     [WithAll(typeof(DestroyEntityFlag))]
     [WithNone(typeof(PlayerTag))]
     [BurstCompile]
     public partial struct DestroyEntityJob: IJobEntity
     {
-        public EntityCommandBuffer.ParallelWriter BeginECB;
         public EntityCommandBuffer.ParallelWriter EndECB;
-
-        [ReadOnly] 
-        public ComponentLookup<GemPrefab> GemPrefabLookup;
-        [ReadOnly]
-        public ComponentLookup<LocalTransform> LocalTransformLookup;
 
         // [ChunkIndexInQuery] gets the memory block ID for the current batch of entities.
         // We MUST pass this into our ParallelWriter ECBs (BeginECB/EndECB) as the first parameter.
@@ -103,17 +123,6 @@ namespace Survivors.Game
         // it can organize them deterministically, preventing race conditions and physics glitches.
         public void Execute([ChunkIndexInQuery] int chunkIndex, Entity entity)
         {
-            if(GemPrefabLookup.HasComponent(entity))
-            {
-                //Instantiate GemPrefab
-                var gemPrefab = GemPrefabLookup[entity].Value;
-                var newGem = BeginECB.Instantiate(chunkIndex, gemPrefab);
-
-                //Set enemy position to newly spawnGem
-                var spawnPosition = LocalTransformLookup[entity].Position;
-                BeginECB.SetComponent(chunkIndex, newGem, LocalTransform.FromPosition(spawnPosition));
-            }
-
             EndECB.DestroyEntity(chunkIndex, entity);
         }
     }
