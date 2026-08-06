@@ -81,7 +81,7 @@ namespace Survivors.Game
         [Unity.Collections.ReadOnly]
         public ComponentLookup<EnemyTag> EnemyLookUp;
         public ComponentLookup<DestroyEntityFlag> DestroyEntityLookUp;
-        
+
         public ComponentLookup<FlashAmount> FlashAmountLookUp;
         public ComponentLookup<FlashSpeedData> FlashSpeedLookUp;
 
@@ -94,53 +94,81 @@ namespace Survivors.Game
 
         public void Execute(TriggerEvent triggerEvent)
         {
-            Entity plasmaBlastEntity;
-            Entity enemyEntity;
+            /*LogEntities.Add(triggerEvent.EntityA);
+            LogEntities.Add(triggerEvent.EntityB);*/
 
-            LogEntities.Add(triggerEvent.EntityA);
-            LogEntities.Add(triggerEvent.EntityB);
+            if (!TryGetBlastAndEnemy(triggerEvent, out Entity plasmaBlastEntity, out Entity enemyEntity))
+            {
+                return;
+            }
 
+            if (AlreadyHit(plasmaBlastEntity, enemyEntity))
+            {  
+                return;
+            }
+
+            ApplyDamage(plasmaBlastEntity, enemyEntity);
+
+            TriggerFlahEffect(enemyEntity);
+
+            // Mark the PlasmaBlast entity for destruction (For now we don't want as we want to damage multiple enemies)
+            // DestroyEntityLookUp.SetComponentEnabled(plasmaBlastEntity, true);
+        }
+
+        private bool TryGetBlastAndEnemy(TriggerEvent triggerEvent, out Entity plasmaBlastEntity, out Entity enemyEntity)
+        {
             // Determine which entity is the PlasmaBlast and which is the Enemy
             if (PlasmaBlastLookUp.HasComponent(triggerEvent.EntityA) && EnemyLookUp.HasComponent(triggerEvent.EntityB))
             {
                 plasmaBlastEntity = triggerEvent.EntityA;
                 enemyEntity = triggerEvent.EntityB;
+                return true;
             }
             else if (PlasmaBlastLookUp.HasComponent(triggerEvent.EntityB) && EnemyLookUp.HasComponent(triggerEvent.EntityA))
             {
                 plasmaBlastEntity = triggerEvent.EntityB;
                 enemyEntity = triggerEvent.EntityA;
-            }
-            else
-            {
-                return;
+                return true;
             }
 
+            plasmaBlastEntity = Entity.Null;
+            enemyEntity = Entity.Null;
+            return false;
+        }
+
+        private bool AlreadyHit(Entity plasmaBlastEntity, Entity enemyEntity)
+        {
             //Skip if this blast already hit this enemy ---
             var hitEnemyList = HitEnemyLookup[plasmaBlastEntity];
-            for(int i = 0; i < hitEnemyList.Length; i++)
+            for (int i = 0; i < hitEnemyList.Length; i++)
             {
                 if (hitEnemyList[i].Value == enemyEntity)
                 {
                     // This enemy has already been hit by this PlasmaBlast, skip it
-                    return;
+                    return true;
                 }
             }
-
             // Record this enemy as hit before applying damage
             hitEnemyList.Add(new HitEnemy { Value = enemyEntity });
+            return false;
+        }
 
+        private void ApplyDamage(Entity plasmaBlastEntity, Entity enemyEntity)
+        {
             var attackDamage = PlasmaBlastLookUp[plasmaBlastEntity].AttackDamage;
 
-            
+
             // Get the dynamic buffer belonging to this particular Enemy entity and add the damage
             var enemyDynamicDamageBuffer = DammageBufferLookup[enemyEntity];
-            enemyDynamicDamageBuffer.Add(new DamageThisFrame 
-            { 
-                Value = attackDamage 
+            enemyDynamicDamageBuffer.Add(new DamageThisFrame
+            {
+                Value = attackDamage
             });
-            
-            if(FlashAmountLookUp.HasComponent(enemyEntity))
+        }
+
+        private void TriggerFlahEffect(Entity enemyEntity)
+        {
+            if (FlashAmountLookUp.HasComponent(enemyEntity))
             {
                 // We check if the enemy has the component to avoid errors, then set it to 1
                 FlashAmountLookUp[enemyEntity] = new FlashAmount
@@ -151,9 +179,6 @@ namespace Survivors.Game
                 // 2. Wake up the fade system for this specific enemy
                 FlashSpeedLookUp.SetComponentEnabled(enemyEntity, true);
             }
-
-            // Mark the PlasmaBlast entity for destruction (For now we don't want as we want to damage multiple enemies)
-           // DestroyEntityLookUp.SetComponentEnabled(plasmaBlastEntity, true);
         }
-    }
+    }       
 }
