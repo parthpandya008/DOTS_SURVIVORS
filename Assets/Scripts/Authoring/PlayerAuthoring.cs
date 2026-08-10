@@ -15,6 +15,8 @@ namespace Survivors.Game
         public CollisionFilter CollisionFilter;
         public GameObject UIPrefab;
 
+        [Header("Camera Settings")]
+        public float CameraSmoothSpeed = 10f;
         private class Baker : Baker<PlayerAuthoring>
         {
             public override void Bake(PlayerAuthoring authoring)
@@ -22,7 +24,10 @@ namespace Survivors.Game
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent<PlayerTag>(entity);
                 AddComponent<InitCameraTargetTag>(entity);
-                AddComponent<CameraTarget>(entity);
+                AddComponent(entity, new CameraTarget
+                {
+                    SmoothSpeed = authoring.CameraSmoothSpeed,
+                });
                 AddComponent<AnimationIndexOverride>(entity);
 
                 var enemyLayer = LayerMask.NameToLayer("Enemy");
@@ -58,6 +63,7 @@ namespace Survivors.Game
     public struct CameraTarget : IComponentData
     {
         public UnityObjectRef<Transform> CameraTransform;
+        public float SmoothSpeed; 
     }
 
     //This component is to set CameraTarget.CameraTransform once, then remove it
